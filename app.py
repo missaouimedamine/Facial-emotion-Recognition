@@ -6,7 +6,7 @@ import streamlit_webrtc as webrtc
 from PIL import Image
 
 # Load the model and emotion dictionary
-model = load_model('emotion_model.h5')
+model = load_model('emotion_model.h5', compile=False)  # Avoid optimizer loading warnings
 emotion_dict = {0: "Angry", 1: "Disgust", 2: "Fear", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
 
 # Initialize the Haar Cascade face detection model
@@ -35,6 +35,8 @@ def process_frame(frame):
 def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
     processed_frame = process_frame(img)
+    
+    # Convert the processed frame back to a video frame
     return webrtc.VideoFrame.from_ndarray(processed_frame, format="bgr24")
 
 # WebRTC configuration
