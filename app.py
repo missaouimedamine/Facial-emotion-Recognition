@@ -5,6 +5,7 @@ import PIL
 from base64 import b64decode, b64encode
 from keras.models import load_model
 import streamlit as st
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 
 # Initialize the Haar Cascade face detection model
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -54,16 +55,42 @@ def process_frame(frame):
 
     return frame, emotions
 
+
+class VideoProcessor(VideoProcessorBase):
+    def recv(self, frame):
+        img = frame.to_ndarray(format="bgr24")
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray)
+        
+        for (x, y, w, h) in faces:
+            face_region = gray[y:y+h, x:x+w]
+            face_resized = cv2.resize(face_region, (48, 48))
+            img_array = np.expand_dims(face_resized, axis=0)
+            img_array = np.expand_dims(img_array, axis=-1)
+            predictions = model.predict(img_array)
+            predicted_class = np.argmax(predictions)
+            predicted_emotion = emotion_dict[predicted_class]
+            accuracy = predictions[0][predicted_class]
+            
+            cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            cv2.putText(img, f"{predicted_emotion} ({accuracy:.2f})", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
+        
+        return frame.from_ndarray(img, format="bgr24")
+
+
+
+
+
 # Page Title and Description
 st.set_page_config(page_title="Facial Emotion Recognition", layout="wide")
 st.title("Facial Emotion Recognition")
 
 # Sidebar
 st.sidebar.title("Options")
-option = st.sidebar.radio("Select Option", ("Drag a File", "Take a Picture", "Process Video"))
+option = st.sidebar.radio("Select Option", ("Drag a File","Process Video"))
 
 # Main Content Area
-if option == "Drag a File" or option == "Take a Picture":
+if option == "Drag a File" :
     st.subheader("Photo Processing")
     
     # Process image or captured frame
@@ -72,16 +99,7 @@ if option == "Drag a File" or option == "Take a Picture":
         if uploaded_file is not None:
             file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
             image = cv2.imdecode(file_bytes, 1)
-    elif option == "Take a Picture":
-        cap = cv2.VideoCapture(0)
-        if st.button("Take Picture"):
-            ret, image = cap.read()
-            if ret:
-                cap.release()
-        else:
-            cap.release()
-            st.warning("Click the 'Take Picture' button to capture an image.")
-
+    
     if 'image' in locals():
         processed_frame, emotions = process_frame(image)
         # Display processed frame and emotions
@@ -90,21 +108,7 @@ if option == "Drag a File" or option == "Take a Picture":
         if not emotions:
             st.warning("No faces detected in the image.")
 elif option == "Process Video":
-    st.subheader("Video Processing")
-    run = st.button('Start')
-    stop = st.button('Stop')
+    webrtc_streamer(key="camera", video_processor_factory=VideoProcessor)
 
-    camera = cv2.VideoCapture(0)
-    FRAME_WINDOW = st.image([])
 
-    while run and not stop:
-        _, frame = camera.read()
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        processed_frame, emotions = process_frame(frame)
-        if emotions:
-            FRAME_WINDOW.image(processed_frame, use_column_width=True)
-
-    if stop:
-        st.write('Stopped')
-
-    camera.release()
+    
