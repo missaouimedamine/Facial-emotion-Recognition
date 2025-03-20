@@ -1,8 +1,15 @@
-# Facial Emotion Recognition System
+# Facial Emotion Recognition System 🎭
 
-## Project Overview
-you can consult the app on this link:
-https://facial-emotion-recognition-system.streamlit.app/
+## Project Overview 🌟
+
+Welcome to the **Facial Emotion Recognition System**! This project leverages deep learning to accurately predict emotions from facial expressions in real-time. 
+
+🔗 **Try out the application**:  
+You can experience the app directly by following the link below:
+[**Facial Emotion Recognition System**](https://facial-emotion-recognition-system.streamlit.app/)
+
+![image](https://github.com/user-attachments/assets/efb006a9-fe2b-41aa-8b3c-596e36052001)
+
 
 The **Facial Emotion Recognition System** is a deep learning-based application that identifies human emotions by analyzing facial expressions in images or real-time video streams. This project uses a Convolutional Neural Network (CNN) for emotion detection and has been implemented with **Streamlit** to provide an intuitive and user-friendly interface for interaction. Users can upload images or use their webcam to detect emotions in real time.
 
