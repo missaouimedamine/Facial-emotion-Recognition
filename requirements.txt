@@ -4,3 +4,4 @@ pillow
 keras
 streamlit
 tensorflow
+streamlit_webrtc
