@@ -5,3 +5,4 @@ keras
 streamlit
 tensorflow
 streamlit-webrtc
+streamlit_webrtc
