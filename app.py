@@ -2,7 +2,8 @@ import numpy as np
 import cv2
 import streamlit as st
 from keras.models import load_model
-import streamlit_webrtc as webrtc
+import streamlit_webrtc as webrtc,webrtc_streamer
+
 from PIL import Image
 
 # Load the model and emotion dictionary
