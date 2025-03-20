@@ -8,7 +8,7 @@ import streamlit as st
 
 # Initialize the Haar Cascade face detection model
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-model = load_model('emotion_model8.h5')
+model = load_model('emotion_model.h5')
 emotion_dict = {0: "Angry", 1: "Disgust", 2: "Fear", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
 
 # Define functions to convert between JavaScript image reply and OpenCV image
