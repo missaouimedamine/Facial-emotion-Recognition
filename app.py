@@ -2,8 +2,7 @@ import numpy as np
 import cv2
 import streamlit as st
 from keras.models import load_model
-import streamlit_webrtc as webrtc,webrtc_streamer
-
+import streamlit_webrtc as webrtc
 from PIL import Image
 
 # Load the model and emotion dictionary
@@ -44,5 +43,4 @@ st.title("Facial Emotion Recognition")
 
 # Streamlit WebRTC Video Stream
 st.subheader("Video Stream")
-webrtc_streamer(key="emotion-recognition", video_frame_callback=video_frame_callback)
-
+webrtc.webrtc_streamer(key="emotion-recognition", video_frame_callback=video_frame_callback)
