@@ -6,7 +6,7 @@ Welcome to the **Facial Emotion Recognition System**! This project leverages dee
 
 🔗 **Try out the application**:  
 You can experience the app directly by following the link below:
-[**Loan_Payment_Prediction**](https://huggingface.co/spaces/MISSAOUI/Loan_Payment_Prediction)
+[**Facial Emotion Recognition System**](https://facial-emotion-recognition-system.streamlit.app/)
 
 ![image](https://github.com/user-attachments/assets/efb006a9-fe2b-41aa-8b3c-596e36052001)
 
